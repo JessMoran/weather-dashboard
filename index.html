@@ -11,15 +11,15 @@
 <nav class="text-center justify-between flex-wrap bg-green-400 p-6">
   <p class="font-semibold text-2xl tracking-tight text-white">Weather Dashboard</p>
 </nav>
-<div class="flex mb-4">
-  <div id="srchArea" class="w-1/4 bg-green-100 h-screen text-left p-5">
+<div class="dashboard flex mb-4">
+  <aside id="srchArea" class="w-1/4 bg-green-100 h-screen text-left p-5">
     <h2 class="text-green-700 text-xl">Search for a city</h2>
     <input id="userCity" class="text-gray-900 focus:text-green-700 my-4 p-1 shadow-md border border-green-500">
     <button id="srchBtn"><i class="fas fa-search-location text-green-600 text-2xl"></i></button>
     <div id="cities-container"></div>
-  </div>
-  <div class="w-3/4 bg-white h-screen p-5">
-    <div id="weatherData" class="shadow-xl p-5">
+  </aside><!-- .srchArea -->
+  <aside class="displayDataArea w-3/4 bg-white h-screen p-5">
+    <div id="weatherData" class="current-date-area shadow-xl p-5">
       <div class="flex items-center">
         <span id="country" class="text-green-600 p-4 text-3xl"></span>
         <span id="currentDate" class="text-green-900"></span>
@@ -33,14 +33,16 @@
       </p>
       <p class="m-5 text-green-900">Humidity: <span class="text-green-900 text-xl font-bold" id="humidity"></span>%
       </p>
-      <p class="m-5 text-green-900">Wind Speed: <span class="text-green-900 text-xl font-bold" id="windSpeed"></span> MPH
+      <p class="m-5 text-green-900">Wind Speed: <span class="text-green-900 text-xl font-bold" id="windSpeed"></span>
+        MPH
       </p>
-      <p class="m-5 text-green-900">UV index: <span class="text-green-900 text-xl font-bold p-2 ml-2" id="uvIndex"></span></p>
-    </div>
+      <p class="m-5 text-green-900">UV index: <span class="text-green-900 text-xl font-bold p-2 ml-2"
+                                                    id="uvIndex"></span></p>
+    </div><!-- .current-date-area -->
     <p class="text-green-600 p-4 text-3xl">5-Day Forecast:</p>
-     <div id="cards-container" class="grid grid-rows-5 grid-flow-col gap-4"></div>
-  </div>
-</div>
+    <div id="cards-container" class="grid grid-rows-5 grid-flow-col gap-4"></div>
+  </aside><!-- .displayDataArea -->
+</div><!-- .dashboard  -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="script.js"></script>
 </body>
