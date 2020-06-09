@@ -1,6 +1,6 @@
 //Global variables
 let citiesCont = $('#cities-container');
-let clickedBtn;
+let cardsContainer = $('#cards-container');
 let cities;
 let city;
 let lat;
@@ -32,6 +32,7 @@ $('#srchBtn').on("click", function() {
 
   // Clean the area
   cleanArea();
+  cleanCardsContainer ();
 
   // Get the city value
   city = $('#userCity').val();
@@ -74,6 +75,7 @@ function displayHistory() {
 $( "body" ).click(function( event ) {
   city =  $(event.target).text();
 
+  cleanCardsContainer ();
   searchCityData ();
 });
 
@@ -90,7 +92,7 @@ function searchCityData () {
     lat = response.city.coord.lat;
     lon = response.city.coord.lon;
     let currentDay = daysList[0];
-    let completeDate = (currentDay.dt_txt).slice(0, 11); // Get complete date
+    let completeDate = (currentDay.dt_txt).slice(0, 11);
     let tempKlv = currentDay.main.temp;
     let humidity = currentDay.main.humidity;
     let windSpeed = currentDay.wind.speed;
@@ -113,18 +115,50 @@ function searchCityData () {
     $('#currentDate').addClass('text-green-900');
 
     display5DayForecast(response);
-
   });
 }
 
-function display5DayForecast(response) {
+  function display5DayForecast(response) {
   let daysList = response.list;
+  let elIdx = 7;
+
   $( daysList ).each(function( i, e ) {
-    if( i === 7 ) {
-      console.log(e)
+
+    if ( i === elIdx ) {
+      tempKlv =  e.main.temp;
+      let date = e.dt_txt.slice(0, 11);
+      let iconCode = e.weather[0].icon;
+
+      kelvinToFharenheit(tempKlv);
+
+      iconsURL = "http://openweathermap.org/img/wn/"+ iconCode + "@2x.png";
+
+      let card = $('<div>');
+      let dateP = $('<p>');
+      let icon = $('<img>');
+      let tempP = $('<p>');
+      let humP = $('<p>');
+
+      $(card).addClass('row-start-1 row-end-4 shadow-xl p-5 text-green-900');
+      $(dateP).addClass('mt-3');
+      $(tempP).addClass('mt-3');
+      $(humP).addClass('mt-3');
+
+      $(dateP).text(date);
+      $(tempP).text('Temp: '+ tempFharenheit + 'ºF');
+      $(humP).text('Humidity: ' + e.main.humidity + '%');
+
+      $(icon).attr("src", iconsURL);
+
+      $('#cards-container').append(card);
+      $(card).append(dateP);
+      $(card).append(icon);
+      $(card).append(tempP);
+      $(card).append(humP);
+
+      elIdx += 7;
     }
   });
-
 }
 
 function kelvinToFharenheit (tempKlv) {
@@ -156,5 +190,11 @@ function getUVIndex() {
 function cleanArea(){
   if (citiesCont.children()) {
     $(citiesCont.children()).remove();
+  }
+}
+
+function cleanCardsContainer () {
+  if (cardsContainer.children()) {
+    $(cardsContainer.children()).remove();
   }
 }
