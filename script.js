@@ -1,16 +1,16 @@
 //Global variables
+let citiesCont = $('#cities-container');
+let clickedBtn;
 let cities;
-let dateTxt;
-let icon;
-let iconsURL;
 let city;
 let lat;
 let lon;
 let uvValue;
+let tempFharenheit;
 
 $( window ).on( "load", setCities );
 
-function setCities() {
+function setCities () {
   //Get cities array and parse in an object
   cities = JSON.parse(localStorage.getItem('cities'));
   //Iterate the cities array
@@ -21,9 +21,19 @@ function setCities() {
   }
 }
 
+$("#userCity").keypress(function () {
+  let text = $("#userCity").val();
+  let stLetter = text.charAt(0).toUpperCase() + text.slice(1);
+  $("#userCity").val(stLetter);
+});
+
 // When the user clicks the srchBtn this function starts running
 $('#srchBtn').on("click", function() {
-   // Get the city value
+
+  // Clean the area
+  cleanArea();
+
+  // Get the city value
   city = $('#userCity').val();
 
   if (city === ''){
@@ -52,18 +62,23 @@ $('#srchBtn').on("click", function() {
 
 function displayHistory() {
   cities.forEach(e => {
-    let cityDiv = $('<div>');
+    let cityBtn = $('<button>');
 
-    $(cityDiv).addClass( "shadow-xl text-green-900 bg-white p-2 my-3" );
-    $(cityDiv).attr('id', 'cityDiv');
+    $(cityBtn).addClass( "shadow-xl text-green-900 bg-white p-2 my-3 block city-btn w-3/4 text-left");
+    $(cityBtn).text(e);
 
-    $(cityDiv).text(e);
-
-    $('#srchArea').append(cityDiv);
+    $('#cities-container').append(cityBtn);
   });
 }
 
+$( "body" ).click(function( event ) {
+  city =  $(event.target).text();
+
+  searchCityData ();
+});
+
 function searchCityData () {
+  //Set the URL
   let queryURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=2fd0e654691a40253ac45f69c92607c9";
 
   $.ajax({
@@ -75,22 +90,19 @@ function searchCityData () {
     lat = response.city.coord.lat;
     lon = response.city.coord.lon;
     let currentDay = daysList[0];
-    let temperature = currentDay.main.temp;
+    let completeDate = (currentDay.dt_txt).slice(0, 11); // Get complete date
+    let tempKlv = currentDay.main.temp;
     let humidity = currentDay.main.humidity;
     let windSpeed = currentDay.wind.speed;
+    let icon = currentDay.weather[0].icon;
 
-    daysList.forEach (e => {
-      let comlpeteDate =  e.dt_txt; // Get complete date
-      dateTxt = comlpeteDate.slice(0, 11); //Take out time
-      icon = e.weather[0].icon; // Get icon code
+    kelvinToFharenheit(tempKlv);
 
-      iconsURL = "http://openweathermap.org/img/wn/"+ icon + "@2x.png"
-
-    });
+    let iconsURL = "http://openweathermap.org/img/wn/"+ icon + "@2x.png";
 
     $('#country').text(cityName);
-    $('#currentDate').text(dateTxt);
-    $('#temperature').text(temperature);
+    $('#currentDate').text(completeDate);
+    $('#temperature').text(tempFharenheit);
     $('#humidity').text(humidity);
     $('#windSpeed').text(windSpeed);
 
@@ -99,7 +111,25 @@ function searchCityData () {
     $('#weatherImg').attr("src", iconsURL);
 
     $('#currentDate').addClass('text-green-900');
+
+    display5DayForecast(response);
+
   });
+}
+
+function display5DayForecast(response) {
+  let daysList = response.list;
+  $( daysList ).each(function( i, e ) {
+    if( i === 7 ) {
+      console.log(e)
+    }
+  });
+
+}
+
+function kelvinToFharenheit (tempKlv) {
+  let result = (tempKlv - 273.15) * 9/5 + 32;
+  tempFharenheit = result.toFixed(2);
 }
 
 function getUVIndex() {
@@ -121,4 +151,10 @@ function getUVIndex() {
       $('#uvIndex').addClass('bg-red-200');
     }
   });
+}
+
+function cleanArea(){
+  if (citiesCont.children()) {
+    $(citiesCont.children()).remove();
+  }
 }
