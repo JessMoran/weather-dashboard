@@ -89,7 +89,7 @@ $("body").click(function (event) {
 // Get weather data and inner the information into the html
 function searchCityData() {
   //Set the URL
-  let queryURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=2fd0e654691a40253ac45f69c92607c9";
+  let queryURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=2fd0e654691a40253ac45f69c92607c9";
 
   //Request to get weather data according to the city that the user wants
   $.ajax({
@@ -111,7 +111,7 @@ function searchCityData() {
     kelvinToFharenheit(tempKlv);
 
     //Modify URL according to the icon code
-    let iconsURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+    let iconsURL = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
 
     //Inner text
     $('#country').text(cityName);
@@ -148,7 +148,7 @@ function display5DayForecast(response) {
       kelvinToFharenheit(tempKlv);
 
       //Modify URL according to the icon code
-      iconsURL = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
+      iconsURL = "https://openweathermap.org/img/wn/" + iconCode + "@2x.png";
 
       //Create elements
       let card = $('<div>');
