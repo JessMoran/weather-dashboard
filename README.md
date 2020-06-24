@@ -21,7 +21,7 @@ The following link demonstrates the deploying app:
 https://jessmoran.github.io/weather-dashboard/
 
 ## To run 
-- Download or fork the application from [here]https://github.com/JessMoran/weather-dashboard
+- Download or fork the application from [here](https://github.com/JessMoran/weather-dashboard)
 - Select ``ìndex.html`` to start the app
 
 ## Author
